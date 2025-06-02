@@ -1,0 +1,125 @@
+additionalCatalogs: #{} 
+  # iceberg: |
+  #   connector.name=iceberg
+  #   iceberg.catalog.type=jdbc
+  #   iceberg.jdbc-catalog.catalog-name=trino-iceberg
+  #   iceberg.jdbc-catalog.driver-class=org.postgresql.Driver
+  #   iceberg.jdbc-catalog.connection-url=jdbc:postgresql://postgresql.orb.local:5432/postgres
+  #   iceberg.jdbc-catalog.connection-user=postgres
+  #   iceberg.jdbc-catalog.connection-password=Sa12345678
+  #   iceberg.jdbc-catalog.default-warehouse-dir=s3://warehouse
+  #   fs.native-s3.enabled=true
+  #   s3.aws-access-key=console
+  #   s3.aws-secret-key=console123
+  #   s3.endpoint=http://minio.default.svc.cluster.local:9000
+  #   s3.path-style-access=true
+  #   s3.region=us-east-1
+  deltalake: |
+    connector.name=delta_lake
+    hive.metastore.uri=thrift://metastore-hive-metastore.default.svc.cluster.local:9083
+    fs.native-s3.enabled=true
+    s3.aws-access-key=console
+    s3.aws-secret-key=console123
+    s3.endpoint=http://minio.default.svc.cluster.local:9000
+    s3.path-style-access=true
+    s3.region=us-east-1
+    delta.vacuum.min-retention=1m
+  iceberg: |
+    connector.name=iceberg
+    hive.metastore.uri=thrift://metastore-hive-metastore.default.svc.cluster.local:9083
+    iceberg.register-table-procedure.enabled=true
+    iceberg.remove-orphan-files.min-retention=1d
+    iceberg.expire-snapshots.min-retention=1d
+    fs.native-s3.enabled=true
+    s3.aws-access-key=console
+    s3.aws-secret-key=console123
+    s3.endpoint=http://minio.default.svc.cluster.local:9000
+    s3.path-style-access=true
+    s3.region=us-east-1
+
+service:
+  #type: ClusterIP
+  type: NodePort
+  port: 8080
+
+additionalConfigProperties: #{}
+  - internal-communication.shared-secret=abcd1234
+
+auth: #{}
+  # test/password1234
+  passwordAuth: "test:$2a$08$cXoC0nieTxl1VNomrxwvreZkvl0jQDvP2/zQNzAPaC8O3Y6mHiKdS"
+  # Set username and password
+  # https://trino.io/docs/current/security/password-file.html#file-format
+  # passwordAuth: "username:encrypted-password-with-htpasswd"
+  # or set the name of a secret containing this file in the password.db key
+  # passwordAuthSecret: "trino-password-authentication"
+  # Set users' groups
+  # https://trino.io/docs/current/security/group-file.html#file-format
+  # refreshPeriod: 5s
+  # groups: "group_name:user_1,user_2,user_3"
+
+authenticationType: "PASSWORD"
+
+server:
+  workers: 2
+  node:
+    environment: production
+    dataDir: /data/trino
+    pluginDir: /usr/lib/trino/plugin
+  log:
+    trino:
+      level: INFO
+  config:
+    path: /etc/trino
+    http:
+      port: 8080
+    https:
+      enabled: false
+      port: 8443
+      keystore:
+        path: ""
+    # Trino supports multiple authentication types: PASSWORD, CERTIFICATE, OAUTH2, JWT, KERBEROS
+    # For more info: https://trino.io/docs/current/security/authentication-types.html
+    authenticationType: "PASSWORD"
+    query:
+      maxMemory: "8GB"
+  exchangeManager:
+    name: "filesystem"
+    baseDir: "/tmp/trino-local-file-system-exchange-manager"
+  workerExtraConfig: ""
+  coordinatorExtraConfig: ""
+  autoscaling:
+    enabled: false
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 50
+    behavior: {}
+    #  scaleDown:
+    #    stabilizationWindowSeconds: 300
+    #    policies:
+    #    - type: Percent
+    #      value: 100
+    #      periodSeconds: 15
+    #  scaleUp:
+    #    stabilizationWindowSeconds: 0
+    #    policies:
+    #    - type: Percent
+    #      value: 100
+    #      periodSeconds: 15
+    #    - type: Pods
+    #      value: 4
+    #      periodSeconds: 15
+    #    selectPolicy: Max
+
+worker:
+  jvm:
+    maxHeapSize: "16G"
+    gcMethod:
+      type: "UseG1GC"
+      g1:
+        heapRegionSize: "32M"
+
+  config:
+    memory:
+      heapHeadroomPerNode: ""
+    query:
+      maxMemoryPerNode: "8GB"

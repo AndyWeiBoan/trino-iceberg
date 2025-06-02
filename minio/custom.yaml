@@ -1,0 +1,34 @@
+
+rootUser: rootUser
+rootPassword: rootpass123
+
+replicas: 1
+
+resources:
+  requests:
+    memory: 512Mi
+
+persistence:
+  enabled: true
+  #storageClass: "unity-tbd-nfs"
+  size: 20Gi
+
+serviceAccount:
+  create: true
+  name: "cy-minio-sa"
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: sp-operation-nginx
+  hosts:
+    - cy-minio.poc.gp-dev2
+
+mode: standalone
+
+consoleIngress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: sp-operation-nginx
+  hosts:
+    - cy-minio-console.poc.gp-dev2

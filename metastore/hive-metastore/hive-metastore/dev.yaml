@@ -1,0 +1,15 @@
+image:
+  repository: "hive-metastore-pgsql"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.0.16"
+
+databaseSecret:
+  create: true
+
+postgres:
+  host: postgresql.orb.local
+  port: 5432
+  db: metastore
+  username: postgres
+  password: Sa12345678
