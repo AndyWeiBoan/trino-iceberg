@@ -1,3 +1,16 @@
+image:
+  # -- Image registry, defaults to empty, which results in DockerHub usage
+  registry: ""
+  # -- Repository location of the Trino image, typically `organization/imagename`
+  repository: trinodb/trino
+  # -- Image tag, defaults to the Trino release version specified as `appVersion` from Chart.yaml
+  tag: "476"
+  # -- Optional digest value of the image specified as `sha256:abcd...`. A specified value overrides `tag`.
+  digest: ""
+  # -- When true, only the content in `repository` is used as image reference
+  useRepositoryAsSoleImageReference: false
+  pullPolicy: IfNotPresent
+
 additionalCatalogs: #{} 
   # iceberg: |
   #   connector.name=iceberg
@@ -38,25 +51,31 @@ additionalCatalogs: #{}
     s3.region=us-east-1
 
 service:
-  #type: ClusterIP
-  type: NodePort
+  type: ClusterIP
+  #type: NodePort
   port: 8080
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: {}
+  hosts: #[]
+    - host: trino.example.local
+      paths:
+        - path: /
+          pathType: Prefix
 
 additionalConfigProperties: #{}
   - internal-communication.shared-secret=abcd1234
+  - "spill-enabled=true"
+  - "spiller-spill-path=/tmp"
+  - "spill-compression-enabled=true"
+  - "http-server.process-forwarded=true"
+  - "http-server.authentication.allow-insecure-over-http=true"
 
 auth: #{}
   # test/password1234
   passwordAuth: "test:$2a$08$cXoC0nieTxl1VNomrxwvreZkvl0jQDvP2/zQNzAPaC8O3Y6mHiKdS"
-  # Set username and password
-  # https://trino.io/docs/current/security/password-file.html#file-format
-  # passwordAuth: "username:encrypted-password-with-htpasswd"
-  # or set the name of a secret containing this file in the password.db key
-  # passwordAuthSecret: "trino-password-authentication"
-  # Set users' groups
-  # https://trino.io/docs/current/security/group-file.html#file-format
-  # refreshPeriod: 5s
-  # groups: "group_name:user_1,user_2,user_3"
 
 authenticationType: "PASSWORD"
 

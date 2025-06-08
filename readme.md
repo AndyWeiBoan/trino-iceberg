@@ -32,3 +32,8 @@ helm upgrade --install minio minio/minio -f minio/values.yaml -f minio/custom.ya
 helm repo add trino https://trinodb.github.io/helm-charts || true && \
 helm upgrade --install trino trino/trino -f trino/charts/trino/values.yaml -f trino/charts/trino/dev.yaml --version 1.39.0 
 ```
+
+
+### geo mmdb
+- https://github.com/gonet2/geoip/blob/master/GeoIP2-City.mmdb
+- https://github.com/AndyWeiBoan/GeoLite2-City/blob/master/GeoLite2-City.mmdb.gz

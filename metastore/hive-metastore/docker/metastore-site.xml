@@ -5,15 +5,15 @@
     </property>
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:postgresql://postgresql.orb.local:5432/metastore</value>
+        <value>jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DB}</value>
     </property>
     <property>
         <name>javax.jdo.option.ConnectionUserName</name>
-        <value>postgres</value>
+        <value>${DATABASE_USER}</value>
     </property>
     <property>
         <name>javax.jdo.option.ConnectionPassword</name>
-        <value>Sa12345678</value>
+        <value>${DATABASE_PASSWORD}</value>
     </property>
 
     <!-- metastore-->

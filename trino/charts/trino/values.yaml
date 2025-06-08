@@ -405,7 +405,7 @@ catalogs:
 #    memory.max-data-per-node=128MB
 # ```
 
-#additionalCatalogs: {}
+additionalCatalogs: {}
 # additionalCatalogs -- Deprecated, use `catalogs` instead. Configure additional
 # [catalogs](https://trino.io/docs/current/installation/deployment.html#catalog-properties).
 

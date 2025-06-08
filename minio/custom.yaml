@@ -15,10 +15,10 @@ persistence:
 
 serviceAccount:
   create: true
-  name: "cy-minio-sa"
+  name: "minio-sa"
 
 ingress:
-  enabled: true
+  enabled: false
   annotations:
     kubernetes.io/ingress.class: sp-operation-nginx
   hosts:
@@ -28,7 +28,7 @@ mode: standalone
 
 consoleIngress:
   enabled: true
-  annotations:
-    kubernetes.io/ingress.class: sp-operation-nginx
-  hosts:
-    - cy-minio-console.poc.gp-dev2
+  # annotations:
+  #   kubernetes.io/ingress.class: sp-operation-nginx
+  # hosts:
+  #   - cy-minio-console.poc.gp-dev2
